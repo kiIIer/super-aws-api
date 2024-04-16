@@ -26,16 +26,11 @@ jobs:
           push: true
           tags: kiiier/super-aws-api:latest
 
-      - name: Create Release Tag
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          TAG_NAME="deploy-$(date +'%Y%m%d%H%M%S')"
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git tag $TAG_NAME
-          git push https://x-access-token:${GH_PAT}@github.com/kiIIer/super-aws-api.git $TAG_NAME
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GH_PAT }}
 
       - name: Output new tag
         run: |
-          echo "New tag $TAG_NAME created"
+          echo "New tag ${{ steps.tag_version.outputs.new_tag }} created"
