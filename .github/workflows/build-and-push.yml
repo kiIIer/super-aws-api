@@ -18,25 +18,35 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Bump version and push tag
-        id: bump_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GH_PAT }}
-          default_bump: patch
-          release_branches: main
+      - name: Generate tag
+        id: prep
+        run: echo "::set-output name=version::$(date +'%Y%m%d%H%M%S')-$(echo $GITHUB_SHA | head -c 8)"
 
-      - name: Build and push Docker image with tags
+      - name: Build and push Docker image with temporary tag
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: |
-            kiiier/super-aws-api:${{ steps.bump_version.outputs.new_tag }}
-            kiiier/super-aws-api:latest
-          labels: |
-            version=${{ github.sha }}
+            kiiier/super-aws-api:temp-${{ steps.prep.outputs.version }}
+
+      - name: Tag and push Docker image as latest
+        run: |
+          docker pull kiiier/super-aws-api:temp-${{ steps.prep.outputs.version }}
+          docker tag kiiier/super-aws-api:temp-${{ steps.prep.outputs.version }} kiiier/super-aws-api:latest
+          docker push kiiier/super-aws-api:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Bump version and push tag to GitHub
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          tag: ${{ steps.prep.outputs.version }}
+          default_bump: false
+          release_branches: main
 
       - name: Output new tag
-        run: echo "New tag ${{ steps.bump_version.outputs.new_tag }} created"
+        run: echo "New tag ${{ steps.prep.outputs.version }} created"
