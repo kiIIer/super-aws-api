@@ -44,7 +44,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GH_PAT }}
-          tag: ${{ steps.prep.outputs.version }}
+          custom_tag: ${{ steps.prep.outputs.version }}
           default_bump: false
           release_branches: main
 
