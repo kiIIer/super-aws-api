@@ -27,13 +27,15 @@ jobs:
           tags: kiiier/super-aws-api:latest
 
       - name: Create Release Tag
-        id: create_tag
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           TAG_NAME="deploy-$(date +'%Y%m%d%H%M%S')"
-          echo "::set-output name=tag::${TAG_NAME}"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git tag $TAG_NAME
-          git push origin $TAG_NAME
+          git push https://${GH_PAT}@github.com/kiiier/super-aws-api.git $TAG_NAME
 
       - name: Output new tag
         run: |
-          echo "New tag ${{ steps.create_tag.outputs.tag }} created"
+          echo "New tag $TAG_NAME created"
