@@ -35,7 +35,6 @@ jobs:
         with:
           source: ./
           destination: ./_site
-          config: .github/pages/_config.yml
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
