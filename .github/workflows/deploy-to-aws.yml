@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'deploy-*'
+      - 'v*'
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           script: |
-            docker pull kiiier/super-aws-api:latest
-            docker stop super-aws-api || true
-            docker rm super-aws-api || true
-            docker run -d --name super-aws-api -p 80:8080 kiiier/super-aws-api:latest
+            sudo docker pull kiiier/super-aws-api:latest
+            sudo docker stop super-aws-api || true
+            sudo docker rm super-aws-api || true
+            sudo docker run -d --name super-aws-api -p 80:8080 kiiier/super-aws-api:latest
