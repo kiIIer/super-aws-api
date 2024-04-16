@@ -11,7 +11,7 @@ CI/CD. ХМАРНІ ОБЧИСЛЕННЯ
 - Посилання на репозиторій: <https://github.com/kiIIer/super-aws-api>
 - Посилання на докерхаб репозиторій: <https://hub.docker.com/repository/docker/kiiier/super-aws-api/general>
 - Посилання на наш апі в авс(там наш самопідписаний сертифікат, тому будуть казати що небезпечно): <https://ec2-16-16-57-192.eu-north-1.compute.amazonaws.com/>
-- Посилання на github pages:
+- Посилання на github pages: <https://kiiier.github.io/super-aws-api/>
 
 ### Налаштування AWS
 
