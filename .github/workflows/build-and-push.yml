@@ -34,7 +34,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git tag $TAG_NAME
-          git push https://${GH_PAT}@github.com/kiiier/super-aws-api.git $TAG_NAME
+          git push https://x-access-token:${GH_PAT}@github.com/kiIIer/super-aws-api.git $TAG_NAME
 
       - name: Output new tag
         run: |
