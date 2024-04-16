@@ -25,10 +25,10 @@ jobs:
             sudo chmod 644 /etc/ssl/cert.pem
             sudo chmod 600 /etc/ssl/key.pem
 
+            sudo docker stop $(sudo docker ps -aq) || true
+            sudo docker rm $(sudo docker ps -aq) || true
+            sudo docker rmi $(sudo docker images -q) || true
             sudo docker pull kiiier/super-aws-api:latest
-            
-            sudo docker stop super-aws-api || true
-            sudo docker rm super-aws-api || true
             
             sudo docker run -d --name super-aws-api -p 443:443 \
               -e CERT_PATH="/etc/ssl/cert.pem" \
