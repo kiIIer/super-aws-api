@@ -17,8 +17,21 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           script: |
+            sudo mkdir -p /etc/ssl
+
+            echo "${{ secrets.SSL_CERTIFICATE }}" | sudo tee /etc/ssl/cert.pem > /dev/null
+            echo "${{ secrets.SSL_PRIVATE_KEY }}" | sudo tee /etc/ssl/key.pem > /dev/null
+
+            sudo chmod 644 /etc/ssl/cert.pem
+            sudo chmod 600 /etc/ssl/key.pem
+
             sudo docker stop $(sudo docker ps -aq) || true
             sudo docker rm $(sudo docker ps -aq) || true
             sudo docker rmi $(sudo docker images -q) || true
             sudo docker pull kiiier/super-aws-api:latest
-            sudo docker run -d --name super-aws-api -p 80:8080 kiiier/super-aws-api:latest
+            
+            sudo docker run -d --name super-aws-api -p 443:443 \
+              -e CERT_PATH="/etc/ssl/cert.pem" \
+              -e KEY_PATH="/etc/ssl/key.pem" \
+              -v /etc/ssl:/etc/ssl:ro \
+              kiiier/super-aws-api:latest
