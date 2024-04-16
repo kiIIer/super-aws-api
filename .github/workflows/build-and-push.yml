@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -25,3 +25,15 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: kiiier/super-aws-api:latest
+
+      - name: Create Release Tag
+        id: create_tag
+        run: |
+          TAG_NAME="deploy-$(date +'%Y%m%d%H%M%S')"
+          echo "::set-output name=tag::${TAG_NAME}"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+      - name: Output new tag
+        run: |
+          echo "New tag ${{ steps.create_tag.outputs.tag }} created"
