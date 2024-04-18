@@ -34,5 +34,5 @@ func main() {
 
 // handler is the function that will be called when the server receives a request
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This lab is done")
+	fmt.Fprintf(w, "Lab defended")
 }
