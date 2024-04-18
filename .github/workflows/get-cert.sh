@@ -26,7 +26,7 @@ if [ -f "/etc/letsencrypt/live/kiiier.top/fullchain.pem" ] && [ -f "/etc/letsenc
     sudo chmod 644 $VOLUME_PATH/cert.pem
     sudo chmod 600 $VOLUME_PATH/key.pem
 
-    sudo docker run -d --name $CONTAINER_NAME -p 443:443 \
+    sudo docker run -d --name $CONTAINER_NAME -p 443:443 -p 80:80 \
       -e CERT_PATH="$VOLUME_PATH/cert.pem" \
       -e KEY_PATH="$VOLUME_PATH/key.pem" \
       -v $VOLUME_PATH:$VOLUME_PATH:ro \
